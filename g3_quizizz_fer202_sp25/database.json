@@ -1,7 +1,7 @@
 {
   "accounts": [
     {
-      "id": 1,
+      "id": "1",
       "username": "admin1",
       "password": "pass1",
       "dob": "1990-01-01",
@@ -10,7 +10,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 2,
+      "id": "2",
       "username": "admin2",
       "password": "pass2",
       "dob": "1991-02-02",
@@ -19,7 +19,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 3,
+      "id": "3",
       "username": "teacher1",
       "password": "pass3",
       "dob": "1985-03-03",
@@ -28,7 +28,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 4,
+      "id": "4",
       "username": "teacher2",
       "password": "pass4",
       "dob": "1986-04-04",
@@ -37,7 +37,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 5,
+      "id": "5",
       "username": "teacher3",
       "password": "pass5",
       "dob": "1987-05-05",
@@ -46,7 +46,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 6,
+      "id": "6",
       "username": "student1",
       "password": "pass6",
       "dob": "2000-06-06",
@@ -55,7 +55,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 7,
+      "id": "7",
       "username": "student2",
       "password": "pass7",
       "dob": "2001-07-07",
@@ -64,7 +64,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 8,
+      "id": "8",
       "username": "student3",
       "password": "pass8",
       "dob": "2002-08-08",
@@ -73,7 +73,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 9,
+      "id": "9",
       "username": "student4",
       "password": "pass9",
       "dob": "2001-05-07",
@@ -82,7 +82,7 @@
       "img": "img/avt_df.png"
     },
     {
-      "id": 10,
+      "id": "10",
       "username": "student5",
       "password": "pass10",
       "dob": "2006-07-07",
@@ -92,58 +92,146 @@
     }
   ],
   "roles": [
-    { "id": 1, "name": "admin" },
-    { "id": 2, "name": "teacher" },
-    { "id": 3, "name": "student" }
+    {
+      "id": "1",
+      "name": "admin"
+    },
+    {
+      "id": "2",
+      "name": "teacher"
+    },
+    {
+      "id": "3",
+      "name": "student"
+    }
   ],
   "questions": [
     {
-      "id": 1,
+      "id": "1",
       "question": "What is the capital of France?",
-      "options": ["Paris", "London", "Berlin", "Madrid"],
-      "answer": "Paris",
-      "img": "img/q1.png"
+      "options": [
+        "Paris",
+        "London",
+        "Berlin",
+        "Madrid"
+      ],
+      "answer": "Paris"
     },
     {
-      "id": 2,
+      "id": "2",
       "question": "What is 2 + 2?",
-      "options": ["3", "4", "5", "6"],
-      "answer": "4",
-      "img": "img/q1.png"
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "answer": "4"
     },
     {
-      "id": 3,
+      "id": "3",
       "question": "Which planet is known as the Red Planet?",
-      "options": ["Earth", "Mars", "Jupiter", "Venus"],
-      "answer": "Mars",
-      "img": "img/q1.png"
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Venus"
+      ],
+      "answer": "Mars"
+    },
+    {
+      "id": "c571",
+      "question": "Test",
+      "options": [
+        "Demo",
+        "Abc",
+        "Def",
+        "Ghi"
+      ],
+      "answer": "Demo"
     }
   ],
   "classes": [
-    { "id": 1, "name": "Math 101", "teacher_id": 3, "students": [6, 7, 8] },
-    { "id": 2, "name": "Physics 102", "teacher_id": 4, "students": [6, 8] }
+    {
+      "id": "1",
+      "code" : "class1",
+      "name": "Math 101",
+      "teacher_id": 3,
+      "students": [
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "id": "2",
+      "code" : "class2",
+      "name": "Physics 102",
+      "teacher_id": 4,
+      "students": [
+        6,
+        8
+      ]
+    }
   ],
   "quizzes": [
     {
-      "id": 1,
       "title": "Basic Math Quiz",
       "teacher_id": 3,
-      "questions": [2],
-      "is_guest": true
+      "questions": [
+        "2",
+        "1"
+      ],
+      "is_guest": true,
+      "id": "1"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Physics Fundamentals",
       "teacher_id": 4,
-      "questions": [3],
+      "questions": [
+        "3"
+      ],
       "is_guest": false
+    },
+    {
+      "id": "8e52",
+      "title": "Test",
+      "teacher_id": 3,
+      "questions": [
+        "1",
+        "2",
+        "3",
+        "c571"
+      ],
+      "is_guest": true
     }
   ],
   "student_classes": [
-    { "id": 1, "student_id": 6, "class_id": 1 },
-    { "id": 2, "student_id": 6, "class_id": 2 },
-    { "id": 3, "student_id": 7, "class_id": 1 },
-    { "id": 4, "student_id": 8, "class_id": 1 },
-    { "id": 5, "student_id": 8, "class_id": 2 }
+    {
+      "id": "1",
+      "student_id": 6,
+      "class_id": 1
+    },
+    {
+      "id": "2",
+      "student_id": 6,
+      "class_id": 2
+    },
+    {
+      "id": "3",
+      "student_id": 7,
+      "class_id": 1
+    },
+    {
+      "id": "4",
+      "student_id": 8,
+      "class_id": 1
+    },
+    {
+      "id": "5",
+      "student_id": 8,
+      "class_id": 2
+    }
   ]
 }
