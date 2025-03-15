@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import QuizCreator from "./Pages/Teacher/QuizCreator";
+import QuestionManager from "./Pages/Teacher/QuestionManager";
+import LoginPage from "./Pages/LoginPage";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
+const getUserRole = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  return user ? user.role_id : null;
+};
+
+const ProtectedRoute = ({ element, roles }) => {
+  const userRole = getUserRole();
+  return roles.includes(userRole) ? element : <Navigate to="/login" />;
+};
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="container mt-4">
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/questions"
+            element={
+              <ProtectedRoute element={<QuestionManager />} roles={[2]} />
+            }
+          />
+          <Route
+            path="/create-quiz"
+            element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />}
+          />
+        </Routes>
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
