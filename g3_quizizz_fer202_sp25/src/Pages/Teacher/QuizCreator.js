@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Button, Form, Modal } from "react-bootstrap";
+import axios from "axios";
 
 const QuizCreator = () => {
   const [questions, setQuestions] = useState([]);
@@ -10,15 +11,38 @@ const QuizCreator = () => {
   const [editingQuiz, setEditingQuiz] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
-  const [showQuizQuestions, setShowQuizQuestions] = useState(null); 
+  const [showQuizQuestions, setShowQuizQuestions] = useState(null);
+
+  const teacherId = "3";
 
   useEffect(() => {
-    fetch("http://localhost:8888/questions")
-      .then((res) => res.json())
-      .then((data) => setQuestions(data));
-    fetch("http://localhost:8888/quizzes")
-      .then((res) => res.json())
-      .then((data) => setQuizzes(data));
+    const fetchQuestionsAndQuizzes = async () => {
+      try {
+        const [questionsRes, quizzesRes] = await Promise.all([
+          axios.get("http://localhost:8888/questions"),
+          axios.get("http://localhost:8888/quizzes"),
+        ]);
+
+        console.log("Dữ liệu từ API questions:", questionsRes.data);
+        console.log("Dữ liệu từ API quizzes:", quizzesRes.data);
+
+        // Lọc câu hỏi theo author_id
+        const filteredQuestions = questionsRes.data.filter(
+          (q) => Number(q.author_id) === teacherId
+        );
+        setQuestions(filteredQuestions);
+
+        // Lọc quizzes theo teacher_id
+        const filteredQuizzes = quizzesRes.data.filter(
+          (quiz) => Number(quiz.teacher_id) === teacherId
+        );
+        setQuizzes(filteredQuizzes);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu từ API:", error);
+      }
+    };
+
+    fetchQuestionsAndQuizzes();
   }, []);
 
   const handleCheckboxChange = (id) => {
@@ -32,9 +56,10 @@ const QuizCreator = () => {
       alert("Vui lòng nhập tiêu đề và chọn ít nhất một câu hỏi.");
       return;
     }
+
     const newQuiz = {
       title: quizTitle,
-      teacher_id: 3,
+      teacher_id: teacherId,
       questions: selectedQuestions,
       is_guest: isGuest,
     };
@@ -54,7 +79,7 @@ const QuizCreator = () => {
       setSelectedQuestions([]);
       setIsGuest(false);
       setEditingQuiz(null);
-      setShowModal(false); 
+      setShowModal(false);
       fetch("http://localhost:8888/quizzes")
         .then((res) => res.json())
         .then((data) => setQuizzes(data));
@@ -66,7 +91,7 @@ const QuizCreator = () => {
     setSelectedQuestions(quiz.questions);
     setIsGuest(quiz.is_guest);
     setEditingQuiz(quiz);
-    setShowModal(true); 
+    setShowModal(true);
   };
 
   const handleDelete = (id) => {
@@ -79,27 +104,39 @@ const QuizCreator = () => {
     }
   };
 
+  const handleShowModal = () => {
+    setEditingQuiz(null);
+    setQuizTitle("");
+    setSelectedQuestions([]);
+    setIsGuest(false);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const handleQuizClick = (quiz) => {
     if (showQuizQuestions === quiz.id) {
-      setShowQuizQuestions(null); 
+      setShowQuizQuestions(null);
     } else {
       const quizQuestions = quiz.questions.map((questionId) => {
         return questions.find((q) => q.id === questionId);
       });
       setSelectedQuiz(quizQuestions);
-      setShowQuizQuestions(quiz.id); 
+      setShowQuizQuestions(quiz.id);
     }
   };
 
   return (
     <div className="container mt-4">
-      <h2>{editingQuiz ? "Chỉnh sửa Quiz" : "Tạo Quiz"}</h2>
+      <h2>Tạo Quiz</h2>
 
-      <Button variant="primary" onClick={() => setShowModal(true)}>
-        {editingQuiz ? "Chỉnh sửa Quiz" : "Tạo Quiz"}
+      <Button variant="primary" onClick={handleShowModal}>
+        Tạo Quiz
       </Button>
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>
             {editingQuiz ? "Chỉnh sửa Quiz" : "Tạo Quiz"}
@@ -118,7 +155,7 @@ const QuizCreator = () => {
             <Form.Group className="mb-3">
               <Form.Check
                 type="checkbox"
-                label="Cho phép khách chơi (Public)"
+                label="Cho phép khách chơi (Công khai)"
                 checked={isGuest}
                 onChange={(e) => setIsGuest(e.target.checked)}
               />
@@ -130,7 +167,6 @@ const QuizCreator = () => {
             <thead>
               <tr>
                 <th>Chọn</th>
-                <th>ID</th>
                 <th>Câu hỏi</th>
               </tr>
             </thead>
@@ -144,7 +180,6 @@ const QuizCreator = () => {
                       onChange={() => handleCheckboxChange(q.id)}
                     />
                   </td>
-                  <td>{q.id}</td>
                   <td>{q.question}</td>
                 </tr>
               ))}
@@ -152,14 +187,11 @@ const QuizCreator = () => {
           </Table>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button variant="secondary" onClick={handleCloseModal}>
             Đóng
           </Button>
-          <Button
-            variant={editingQuiz ? "warning" : "success"}
-            onClick={handleSubmit}
-          >
-            {editingQuiz ? "Cập nhật Quiz" : "Tạo Quiz"}
+          <Button variant="success" onClick={handleSubmit}>
+            {editingQuiz ? "Lưu thay đổi" : "Tạo Quiz"}
           </Button>
         </Modal.Footer>
       </Modal>
@@ -218,7 +250,7 @@ const QuizCreator = () => {
               {selectedQuiz.map((question) => (
                 <tr key={question.id}>
                   <td>{question.question}</td>
-                  <td>{question.answer}</td> 
+                  <td>{question.answer}</td>
                 </tr>
               ))}
             </tbody>

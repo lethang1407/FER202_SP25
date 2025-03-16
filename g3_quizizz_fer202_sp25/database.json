@@ -115,7 +115,8 @@
         "Berlin",
         "Madrid"
       ],
-      "answer": "Paris"
+      "answer": "Paris",
+      "author_id": "3"
     },
     {
       "id": "2",
@@ -126,7 +127,8 @@
         "5",
         "6"
       ],
-      "answer": "4"
+      "answer": "4",
+      "author_id": "3"
     },
     {
       "id": "3",
@@ -137,7 +139,8 @@
         "Jupiter",
         "Venus"
       ],
-      "answer": "Mars"
+      "answer": "Mars",
+      "author_id": "4"
     },
     {
       "id": "c571",
@@ -148,90 +151,146 @@
         "Def",
         "Ghi"
       ],
-      "answer": "Demo"
+      "answer": "Demo",
+      "author_id": "3"
+    },
+    {
+      "id": "cc5a",
+      "question": "ReactJS được phát triển bởi ai?",
+      "options": [
+        "Google",
+        "Facebook",
+        "Microsoft",
+        "Apple"
+      ],
+      "answer": "Facebook",
+      "author_id": "3"
+    },
+    {
+      "id": "3dea",
+      "question": "Trong React, cái gì giúp quản lý trạng thái của một component?",
+      "options": [
+        "Props",
+        "State",
+        "Hooks",
+        "JSX"
+      ],
+      "answer": "State",
+      "author_id": "3"
+    },
+    {
+      "id": "7ada",
+      "question": "Đâu là cú pháp chính của JSX trong React?",
+      "options": [
+        "function() { return <div>Hello World</div>; }",
+        "function() { return div('Hello World'); }",
+        "return { Hello World };",
+        "render() { return \"<div>Hello World</div>\"; }"
+      ],
+      "answer": "function() { return <div>Hello World</div>; }",
+      "author_id": "3"
+    },
+    {
+      "id": "a415",
+      "question": "Điều gì xảy ra khi bạn thay đổi state trong React?",
+      "options": [
+        "React sẽ tự động gọi lại component và cập nhật lại giao diện.",
+        "Chỉ cần reload lại trang web.",
+        "React không cập nhật lại giao diện.",
+        "Component sẽ bị xóa."
+      ],
+      "answer": "React sẽ tự động gọi lại component và cập nhật lại giao diện.",
+      "author_id": "3"
+    },
+    {
+      "id": "e9f6",
+      "question": "Hook nào trong React giúp bạn xử lý các tác vụ bên ngoài như gọi API?",
+      "options": [
+        "useEffect",
+        "useState",
+        "useContext",
+        "useMemo"
+      ],
+      "answer": "useEffect",
+      "author_id": "3"
     }
   ],
   "classes": [
     {
       "id": "1",
-      "code" : "class1",
+      "code": "class1",
       "name": "Math 101",
-      "teacher_id": 3,
+      "teacher_id": "3",
       "students": [
-        6,
-        7,
-        8
+        "6",
+        "7"
+      ],
+      "quizzes_id": [
+        "2",
+        "8e52"
       ]
     },
     {
       "id": "2",
-      "code" : "class2",
+      "code": "class2",
       "name": "Physics 102",
-      "teacher_id": 4,
+      "teacher_id": "4",
       "students": [
-        6,
-        8
-      ]
+        "6",
+        "3"
+      ],
+      "quizzes_id": []
+    },
+    {
+      "id": "1742118929700",
+      "code": "class-gdmk6t",
+      "name": "Demo",
+      "teacher_id": "3",
+      "students": [],
+      "quizzes_id": []
     }
   ],
   "quizzes": [
     {
-      "title": "Basic Math Quiz",
-      "teacher_id": 3,
-      "questions": [
-        "2",
-        "1"
-      ],
-      "is_guest": true,
-      "id": "1"
-    },
-    {
       "id": "2",
       "title": "Physics Fundamentals",
-      "teacher_id": 4,
+      "teacher_id": "4",
       "questions": [
         "3"
       ],
       "is_guest": false
     },
     {
-      "id": "8e52",
       "title": "Test",
-      "teacher_id": 3,
+      "teacher_id": "3",
       "questions": [
-        "1",
-        "2",
-        "3",
         "c571"
       ],
-      "is_guest": true
-    }
-  ],
-  "student_classes": [
-    {
-      "id": "1",
-      "student_id": 6,
-      "class_id": 1
+      "is_guest": true,
+      "id": "8e52"
     },
     {
-      "id": "2",
-      "student_id": 6,
-      "class_id": 2
+      "title": "FER202",
+      "teacher_id": "3",
+      "questions": [
+        "e9f6",
+        "a415",
+        "7ada",
+        "3dea",
+        "cc5a"
+      ],
+      "is_guest": false,
+      "id": "75d1"
     },
     {
-      "id": "3",
-      "student_id": 7,
-      "class_id": 1
-    },
-    {
-      "id": "4",
-      "student_id": 8,
-      "class_id": 1
-    },
-    {
-      "id": "5",
-      "student_id": 8,
-      "class_id": 2
+      "id": "c76d",
+      "title": "Basic Math Quiz",
+      "teacher_id": "3",
+      "questions": [
+        "2",
+        "c571"
+      ],
+      "is_guest": false
     }
   ]
 }

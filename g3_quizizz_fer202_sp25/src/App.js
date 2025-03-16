@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 import QuizCreator from "./Pages/Teacher/QuizCreator";
 import QuestionManager from "./Pages/Teacher/QuestionManager";
+import TeacherClassManagement from "./Pages/Teacher/TeacherClassManagement";
+import OwnerClass from "./Pages/Teacher/OwnerClass";
 import LoginPage from "./Pages/LoginPage";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -35,6 +37,19 @@ const App = () => {
           <Route
             path="/create-quiz"
             element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />}
+          />
+          <Route
+            path="/manage-classes"
+            element={
+              <ProtectedRoute
+                element={<TeacherClassManagement />}
+                roles={[2]}
+              />
+            }
+          />
+          <Route
+            path="/your-class/:id"
+            element={<ProtectedRoute element={<OwnerClass />} roles={[2]} />}
           />
         </Routes>
       </div>
