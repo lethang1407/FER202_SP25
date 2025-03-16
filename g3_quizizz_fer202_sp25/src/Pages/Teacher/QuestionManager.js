@@ -3,21 +3,27 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const QuestionManager = () => {
+  const teacherId = "3";
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState({
     question: "",
     options: ["", "", "", ""],
     answer: "",
-    img: "",
+    author_id: teacherId,
   });
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [, setLoading] = useState(false);
 
   // Fetch questions on component mount
   useEffect(() => {
     axios.get("http://localhost:8888/questions").then((response) => {
-      setQuestions(response.data);
+      // Chỉ lấy các câu hỏi có author_id trùng với teacherId
+      const filteredQuestions = response.data.filter(
+        (q) => q.author_id === teacherId
+      );
+      setQuestions(filteredQuestions);
     });
   }, []);
 
@@ -26,7 +32,6 @@ const QuestionManager = () => {
     setNewQuestion({ ...newQuestion, [e.target.name]: e.target.value });
   };
 
-  // Handle option changes (for multiple choice)
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...newQuestion.options];
     updatedOptions[index] = value;
@@ -39,37 +44,42 @@ const QuestionManager = () => {
   };
 
   // Submit new or edited question
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingQuestion) {
-      axios
-        .put(
+
+    // Kiểm tra xem đã chọn đáp án chưa
+    if (!newQuestion.answer) {
+      alert("Bạn phải chọn một đáp án!");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      if (editingQuestion) {
+        const response = await axios.put(
           `http://localhost:8888/questions/${editingQuestion.id}`,
           newQuestion
-        )
-        .then((response) => {
-          setQuestions(
-            questions.map((q) =>
-              q.id === editingQuestion.id ? response.data : q
-            )
-          );
-        })
-        .catch((error) => {
-          console.error("There was an error updating the question:", error);
-        });
-    } else {
-      axios
-        .post("http://localhost:8888/questions", newQuestion)
-        .then((response) => {
-          setQuestions((prev) => [...prev, response.data]);
-        })
-        .catch((error) => {
-          console.error("There was an error adding the question:", error);
-        });
+        );
+        setQuestions(
+          questions.map((q) =>
+            q.id === editingQuestion.id ? response.data : q
+          )
+        );
+      } else {
+        const response = await axios.post(
+          "http://localhost:8888/questions",
+          newQuestion
+        );
+        setQuestions((prev) => [...prev, response.data]);
+      }
+      resetForm();
+      setShowPopup(false);
+    } catch (error) {
+      console.error("Lỗi khi gửi dữ liệu:", error);
     }
-    // Reset state after submission
-    resetForm();
-    setShowPopup(false);
+
+    setLoading(false);
   };
 
   // Reset the form when closing the modal or after submission
@@ -78,7 +88,7 @@ const QuestionManager = () => {
       question: "",
       options: ["", "", "", ""],
       answer: "",
-      img: "",
+      author_id: teacherId,
     });
     setEditingQuestion(null);
   };
@@ -115,13 +125,13 @@ const QuestionManager = () => {
 
   return (
     <div className="container">
-      <h2>Question Manager</h2>
+      <h2>Quản lí câu hỏi</h2>
       <button
         className="btn btn-primary"
         onClick={() => setShowPopup(true)}
         disabled={showPopup} // Disable "Add Question" if modal is already open
       >
-        Add Question
+        Tạo câu hỏi
       </button>
 
       {/* Modal for adding/editing question */}
@@ -131,7 +141,7 @@ const QuestionManager = () => {
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">
-                  {editingQuestion ? "Edit Question" : "Add Question"}
+                  {editingQuestion ? "Chỉnh sửa" : "Tạo câu hỏi"}
                 </h5>
                 <button
                   type="button"
@@ -142,7 +152,7 @@ const QuestionManager = () => {
               <div className="modal-body">
                 <form onSubmit={handleSubmit}>
                   <div className="mb-3">
-                    <label className="form-label">Question</label>
+                    <label className="form-label">Câu hỏi</label>
                     <input
                       type="text"
                       className="form-control"
@@ -153,30 +163,38 @@ const QuestionManager = () => {
                     />
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Options</label>
-                    {newQuestion.options.map((option, index) => (
-                      <div key={index} className="form-check">
-                        <input
-                          type="text"
-                          className="form-control d-inline w-75"
-                          value={option}
-                          onChange={(e) =>
-                            handleOptionChange(index, e.target.value)
-                          }
-                          required
-                        />
-                        <input
-                          type="radio"
-                          name="answer"
-                          className="form-check-input ms-2"
-                          checked={newQuestion.answer === option}
-                          onChange={() => handleAnswerSelect(option)}
-                        />
-                      </div>
-                    ))}
+                    <label className="form-label">Lựa chọn</label>
+                    <div className="d-flex flex-column gap-2">
+                      {newQuestion.options.map((option, index) => (
+                        <div
+                          key={index}
+                          className={`p-2 border rounded d-flex justify-content-between align-items-center
+          ${
+            newQuestion.answer && newQuestion.answer === option
+              ? "bg-success text-white"
+              : ""
+          }`}
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleAnswerSelect(option)}
+                        >
+                          <input
+                            type="text"
+                            className="form-control me-2"
+                            value={option}
+                            onChange={(e) =>
+                              handleOptionChange(index, e.target.value)
+                            }
+                            placeholder="Nhập đáp án..."
+                            required
+                          />
+                          {newQuestion.answer &&
+                            newQuestion.answer === option && <span></span>}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                   <button type="submit" className="btn btn-success">
-                    {editingQuestion ? "Update" : "Add"} Question
+                    {editingQuestion ? "Cập nhật" : "Tạo"} Câu hỏi
                   </button>
                 </form>
               </div>
@@ -191,7 +209,7 @@ const QuestionManager = () => {
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Question Details</h5>
+                <h5 className="modal-title">Mô tả câu hỏi</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -230,13 +248,13 @@ const QuestionManager = () => {
       )}
 
       {/* Existing Questions Table */}
-      <h3 className="mt-4">Existing Questions</h3>
+      <h3 className="mt-4">Danh sách câu hỏi</h3>
       <table className="table table-bordered">
         <thead>
           <tr>
-            <th>Question</th>
-            <th>Answer</th>
-            <th>Actions</th>
+            <th>Câu hỏi</th>
+            <th>Đáp án</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
@@ -258,7 +276,7 @@ const QuestionManager = () => {
                     handleEdit(q);
                   }}
                 >
-                  Edit
+                  Sửa
                 </button>
                 <button
                   className="btn btn-danger btn-sm"
@@ -267,7 +285,7 @@ const QuestionManager = () => {
                     handleDelete(q.id);
                   }}
                 >
-                  Delete
+                  Xóa
                 </button>
               </td>
             </tr>
