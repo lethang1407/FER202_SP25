@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 const QuizList = ({ classId }) => {
-  const [quizzes, setQuizzes] = useState([]); // Danh sách quizzes trong lớp
-  const [availableQuizzes, setAvailableQuizzes] = useState([]); // Danh sách tất cả quizzes
+  const [quizzes, setQuizzes] = useState([]);
+  const [availableQuizzes, setAvailableQuizzes] = useState([]);
   const [selectedQuiz, setSelectedQuiz] = useState("");
+  const [editingQuizId, setEditingQuizId] = useState(null);
+  const [newDuration, setNewDuration] = useState("");
 
-  // Lấy danh sách quizzes của lớp học (Sử dụng useCallback để tránh re-render không cần thiết)
+  // Lấy danh sách quizzes của lớp
   const fetchQuizzes = useCallback(async () => {
     try {
       const classResponse = await axios.get(
@@ -14,7 +16,7 @@ const QuizList = ({ classId }) => {
       );
       const quizzesData = await axios.get("http://localhost:8888/quizzes");
 
-      // Lọc danh sách quizzes theo danh sách ID trong lớp
+      // Lọc danh sách quizzes theo lớp
       const filteredQuizzes = quizzesData.data.filter((quiz) =>
         classResponse.data.quizzes_id.includes(quiz.id)
       );
@@ -24,13 +26,13 @@ const QuizList = ({ classId }) => {
     } catch (error) {
       console.error("Lỗi khi tải danh sách quizzes", error);
     }
-  }, [classId]); // Đưa classId vào dependency của useCallback
+  }, [classId]);
 
   useEffect(() => {
     fetchQuizzes();
-  }, [fetchQuizzes]); // Đưa fetchQuizzes vào dependency của useEffect
+  }, [fetchQuizzes]);
 
-  // Hàm thêm quiz vào lớp học
+  // Thêm quiz vào lớp
   const addQuizToClass = async () => {
     if (!selectedQuiz) {
       alert("Vui lòng chọn một quiz hợp lệ!");
@@ -42,7 +44,6 @@ const QuizList = ({ classId }) => {
         `http://localhost:8888/classes/${classId}`
       );
 
-      // Không dùng parseInt để so sánh ID
       if (classResponse.data.quizzes_id.includes(selectedQuiz)) {
         alert("Quiz này đã có trong danh sách!");
         return;
@@ -56,14 +57,14 @@ const QuizList = ({ classId }) => {
       });
 
       alert("Thêm quiz thành công!");
-      fetchQuizzes(); // Cập nhật lại danh sách mà không cần load trang
+      fetchQuizzes();
       setSelectedQuiz("");
     } catch (error) {
       console.error("Lỗi khi thêm quiz", error);
     }
   };
 
-  // Hàm xóa quiz khỏi lớp học
+  // Xóa quiz khỏi lớp
   const removeQuizFromClass = async (quizId) => {
     try {
       const classResponse = await axios.get(
@@ -83,6 +84,27 @@ const QuizList = ({ classId }) => {
       fetchQuizzes();
     } catch (error) {
       console.error("Lỗi khi xóa quiz", error);
+    }
+  };
+
+  // Bắt đầu chỉnh sửa thời gian
+  const startEditingDuration = (quiz) => {
+    setEditingQuizId(quiz.id);
+    setNewDuration(quiz.duration || "");
+  };
+
+  // Lưu thời gian làm bài mới
+  const saveNewDuration = async (quizId) => {
+    try {
+      await axios.patch(`http://localhost:8888/quizzes/${quizId}`, {
+        duration: newDuration === "" ? null : Number(newDuration),
+      });
+
+      alert("Cập nhật thời gian thành công!");
+      setEditingQuizId(null);
+      fetchQuizzes();
+    } catch (error) {
+      console.error("Lỗi khi cập nhật thời gian làm bài", error);
     }
   };
 
@@ -114,13 +136,53 @@ const QuizList = ({ classId }) => {
             key={quiz.id}
             className="list-group-item d-flex justify-content-between align-items-center"
           >
-            {quiz.title}
-            <button
-              className="btn btn-danger btn-sm"
-              onClick={() => removeQuizFromClass(quiz.id)}
-            >
-              Xóa
-            </button>
+            <div>
+              <strong>{quiz.title}</strong> -{" "}
+              {quiz.duration !== null
+                ? `${quiz.duration} phút`
+                : "Không có thời hạn"}
+            </div>
+            <div>
+              {editingQuizId === quiz.id ? (
+                <>
+                  <input
+                    type="number"
+                    className="form-control d-inline-block"
+                    style={{ width: "80px", marginRight: "8px" }}
+                    value={newDuration}
+                    onChange={(e) => setNewDuration(e.target.value)}
+                    min="1"
+                  />
+                  <button
+                    className="btn btn-success btn-sm me-2"
+                    onClick={() => saveNewDuration(quiz.id)}
+                  >
+                    Lưu
+                  </button>
+                  <button
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setEditingQuizId(null)}
+                  >
+                    Hủy
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="btn btn-warning btn-sm me-2"
+                    onClick={() => startEditingDuration(quiz)}
+                  >
+                    Sửa
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm"
+                    onClick={() => removeQuizFromClass(quiz.id)}
+                  >
+                    Xóa
+                  </button>
+                </>
+              )}
+            </div>
           </li>
         ))}
       </ul>

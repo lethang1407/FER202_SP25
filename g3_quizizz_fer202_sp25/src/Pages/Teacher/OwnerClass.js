@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import StudentList from "./component/StudentList";
 import ClassInfo from "./component/ClassInfo";
 import QuizList from "./component/QuizList";
+import QuizResultsTable from "./component/QuizResultsTable";
 
 const OwnerClass = () => {
   const { id } = useParams();
@@ -12,6 +13,8 @@ const OwnerClass = () => {
   const [activeTab, setActiveTab] = useState("students");
   const [classInfo, setClassInfo] = useState(null);
   const [students, setStudents] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
+  const [quizResults, setQuizResults] = useState([]);
   const [newClassName, setNewClassName] = useState("");
   const [newClassCode, setNewClassCode] = useState("");
 
@@ -28,13 +31,29 @@ const OwnerClass = () => {
         const studentsResponse = await axios.get(
           "http://localhost:8888/accounts"
         );
-
-        // So sánh trực tiếp ID thay vì ép kiểu
         const studentDetails = studentsResponse.data.filter((acc) =>
           classResponse.data.students.includes(acc.id)
         );
         setStudents(studentDetails);
       }
+
+      if (classResponse.data.quizzes_id.length > 0) {
+        const quizzesResponse = await axios.get(
+          "http://localhost:8888/quizzes"
+        );
+        const filteredQuizzes = quizzesResponse.data.filter((quiz) =>
+          classResponse.data.quizzes_id.includes(quiz.id)
+        );
+        setQuizzes(filteredQuizzes);
+      }
+
+      const resultsResponse = await axios.get(
+        "http://localhost:8888/quiz_results"
+      );
+      const filteredResults = resultsResponse.data.filter((result) =>
+        classResponse.data.students.includes(result.student_id)
+      );
+      setQuizResults(filteredResults);
     } catch (error) {
       console.error("Lỗi khi lấy thông tin lớp học", error);
     }
@@ -114,6 +133,16 @@ const OwnerClass = () => {
               Danh sách Quiz
             </button>
           </li>
+          <li className="nav-item">
+            <button
+              className={`nav-link ${
+                activeTab === "quizResults" ? "active" : ""
+              }`}
+              onClick={() => setActiveTab("quizResults")}
+            >
+              Kết quả Quiz
+            </button>
+          </li>
         </ul>
       </nav>
 
@@ -132,6 +161,13 @@ const OwnerClass = () => {
           />
         )}
         {activeTab === "quizzes" && <QuizList classId={id} />}
+        {activeTab === "quizResults" && (
+          <QuizResultsTable
+            quizResults={quizResults}
+            students={students}
+            quizzes={quizzes}
+          />
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import QuestionManager from "./Pages/Teacher/QuestionManager";
 import TeacherClassManagement from "./Pages/Teacher/TeacherClassManagement";
 import OwnerClass from "./Pages/Teacher/OwnerClass";
 import LoginPage from "./Pages/LoginPage";
+import TeacherHome from "./Pages/Teacher/TeacherHome";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const getUserRole = () => {
@@ -35,6 +36,10 @@ const App = () => {
             }
           />
           <Route
+            path="/teacher-home"
+            element={<ProtectedRoute element={<TeacherHome />} roles={[2]} />}
+          />
+          <Route
             path="/create-quiz"
             element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />}
           />
@@ -49,7 +54,7 @@ const App = () => {
           />
           <Route
             path="/your-class/:id"
-            element={<ProtectedRoute element={<OwnerClass />} roles={[2]} />}
+            element={<ProtectedRoute element={<OwnerClass />} roles={[2, 3]} />}
           />
         </Routes>
       </div>
