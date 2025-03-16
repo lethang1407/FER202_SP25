@@ -16,9 +16,24 @@ const LoginPage = () => {
       const user = users.find(
         (u) => u.username === username && u.password === password
       );
+
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
-        navigate("/home");
+
+        // Điều hướng theo `role_id`
+        switch (user.role_id) {
+          case 1:
+            navigate("/admin-home");
+            break;
+          case 2:
+            navigate("/teacher-home");
+            break;
+          case 3:
+            navigate("/student-home");
+            break;
+          default:
+            setError("Unauthorized role");
+        }
       } else {
         setError("Invalid username or password");
       }

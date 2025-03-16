@@ -109,42 +109,72 @@
     {
       "id": "1",
       "question": "What is the capital of France?",
-      "options": ["Paris", "London", "Berlin", "Madrid"],
+      "options": [
+        "Paris",
+        "London",
+        "Berlin",
+        "Madrid"
+      ],
       "answer": "Paris",
       "author_id": "3"
     },
     {
       "id": "2",
       "question": "What is 2 + 2?",
-      "options": ["3", "4", "5", "6"],
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
       "answer": "4",
       "author_id": "3"
     },
     {
       "id": "3",
       "question": "Which planet is known as the Red Planet?",
-      "options": ["Earth", "Mars", "Jupiter", "Venus"],
+      "options": [
+        "Earth",
+        "Mars",
+        "Jupiter",
+        "Venus"
+      ],
       "answer": "Mars",
       "author_id": "4"
     },
     {
       "id": "c571",
       "question": "Test",
-      "options": ["Demo", "Abc", "Def", "Ghi"],
+      "options": [
+        "Demo",
+        "Abc",
+        "Def",
+        "Ghi"
+      ],
       "answer": "Demo",
       "author_id": "3"
     },
     {
       "id": "cc5a",
       "question": "ReactJS được phát triển bởi ai?",
-      "options": ["Google", "Facebook", "Microsoft", "Apple"],
+      "options": [
+        "Google",
+        "Facebook",
+        "Microsoft",
+        "Apple"
+      ],
       "answer": "Facebook",
       "author_id": "3"
     },
     {
       "id": "3dea",
       "question": "Trong React, cái gì giúp quản lý trạng thái của một component?",
-      "options": ["Props", "State", "Hooks", "JSX"],
+      "options": [
+        "Props",
+        "State",
+        "Hooks",
+        "JSX"
+      ],
       "answer": "State",
       "author_id": "3"
     },
@@ -175,7 +205,12 @@
     {
       "id": "e9f6",
       "question": "Hook nào trong React giúp bạn xử lý các tác vụ bên ngoài như gọi API?",
-      "options": ["useEffect", "useState", "useContext", "useMemo"],
+      "options": [
+        "useEffect",
+        "useState",
+        "useContext",
+        "useMemo"
+      ],
       "answer": "useEffect",
       "author_id": "3"
     }
@@ -186,15 +221,25 @@
       "code": "class1",
       "name": "Math 101",
       "teacher_id": "3",
-      "students": ["6", "7"],
-      "quizzes_id": ["2", "8e52"]
+      "students": [
+        "6",
+        "7"
+      ],
+      "quizzes_id": [
+        "8e52",
+        "2",
+        "b1fb"
+      ]
     },
     {
       "id": "2",
       "code": "class2",
       "name": "Physics 102",
       "teacher_id": "4",
-      "students": ["6", "3"],
+      "students": [
+        "6",
+        "3"
+      ],
       "quizzes_id": []
     },
     {
@@ -202,40 +247,59 @@
       "code": "class-test",
       "name": "Demo",
       "teacher_id": "3",
-      "students": [],
-      "quizzes_id": ["8e52"]
+      "students": [
+        "4"
+      ],
+      "quizzes_id": [
+        "8e52"
+      ]
     }
   ],
   "quizzes": [
     {
-      "id": "2",
-      "title": "Physics Fundamentals",
-      "teacher_id": "4",
-      "questions": ["3"],
-      "is_guest": false,
-      "duration": 30
-    },
-    {
       "title": "Test",
       "teacher_id": "3",
-      "questions": ["c571"],
+      "questions": [
+        "c571"
+      ],
       "is_guest": true,
       "id": "8e52",
-      "duration": null
+      "duration": 100
     },
     {
       "title": "FER202",
       "teacher_id": "3",
-      "questions": ["e9f6", "a415", "7ada", "3dea", "cc5a"],
+      "questions": [
+        "e9f6",
+        "a415",
+        "7ada",
+        "3dea",
+        "cc5a"
+      ],
       "is_guest": false,
       "id": "75d1",
       "duration": 30
     },
     {
-      "id": "c76d",
       "title": "Basic Math Quiz",
       "teacher_id": "3",
-      "questions": ["2", "c571"],
+      "questions": [
+        "2"
+      ],
+      "is_guest": false,
+      "id": "c76d",
+      "duration": 30
+    },
+    {
+      "id": "b1fb",
+      "title": "Demo",
+      "teacher_id": "3",
+      "questions": [
+        "1",
+        "c571",
+        "3dea",
+        "a415"
+      ],
       "is_guest": false,
       "duration": null
     }
@@ -251,9 +315,9 @@
       "timestamp": "2025-03-16T10:15:00Z"
     },
     {
-      "id": "8e52",
-      "quiz_id": "8e52",
-      "student_id": "7",
+      "id": "8e51",
+      "quiz_id": "c571",
+      "student_id": "6",
       "score": 95,
       "attempt": 1,
       "start_time": "2025-03-16T11:00:00Z",

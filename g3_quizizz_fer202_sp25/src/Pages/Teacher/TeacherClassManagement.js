@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Modal, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import TeacherNavbar from "./component/TeacherNavbar";
 
 const TeacherClassManagement = () => {
   const [ownedClasses, setOwnedClasses] = useState([]);
@@ -11,30 +12,31 @@ const TeacherClassManagement = () => {
   const [joinCode, setJoinCode] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [newClassCode, setNewClassCode] = useState("");
-  const teacherId = "3"; // ID giáo viên (có thể lấy từ authentication)
+  const user = JSON.parse(localStorage.getItem("user"));
+  const teacherId = user ? user.id : null; // Lấy ID của giáo viên
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchClasses();
-  }, []);
-
-  const fetchClasses = async () => {
+  const fetchClasses = useCallback(async () => {
     try {
-      const classResponse = await axios.get("http://localhost:8888/classes");
+      const { data } = await axios.get("http://localhost:8888/classes");
 
-      const owned = classResponse.data.filter(
-        (cls) => cls.teacher_id === teacherId
-      );
-      const joined = classResponse.data.filter(
-        (cls) => cls.students && cls.students.includes(teacherId)
+      const owned = data.filter((cls) => cls.teacher_id === teacherId);
+      const joined = data.filter(
+        (cls) => Array.isArray(cls.students) && cls.students.includes(teacherId)
       );
 
       setOwnedClasses(owned);
       setJoinedClasses(joined);
     } catch (error) {
-      console.error("Error fetching classes", error);
+      console.error("Error fetching classes:", error);
     }
-  };
+  }, [teacherId]); // Thêm teacherId vào dependency array của useCallback
+
+  useEffect(() => {
+    if (teacherId) {
+      fetchClasses();
+    }
+  }, [teacherId, fetchClasses]); // Thêm fetchClasses vào dependency array
 
   const generateClassCode = () => {
     return "class-" + Math.random().toString(36).substr(2, 6);
@@ -118,99 +120,102 @@ const TeacherClassManagement = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <div className="card mb-4">
-        <div className="card-body">
-          <h2 className="card-title">Tạo lớp học</h2>
-          <input
-            type="text"
-            className="form-control mb-2"
-            value={className}
-            onChange={(e) => setClassName(e.target.value)}
-            placeholder="Nhập tên lớp"
-          />
-          <button className="btn btn-primary" onClick={createClass}>
-            Tạo lớp
-          </button>
-        </div>
-      </div>
-
-      <div className="card mb-4">
-        <div className="card-body">
-          <h2 className="card-title">Tham gia lớp học</h2>
-          <input
-            type="text"
-            className="form-control mb-2"
-            value={joinCode}
-            onChange={(e) => setJoinCode(e.target.value)}
-            placeholder="Nhập mã lớp"
-          />
-          <button className="btn btn-success" onClick={joinClass}>
-            Tham gia
-          </button>
-        </div>
-      </div>
-
-      <h2 className="mb-3">Lớp do bạn làm chủ nhiệm</h2>
-      {ownedClasses.map((cls) => (
-        <div
-          key={cls.id}
-          className="card mb-2"
-          onClick={() => navigate(`/your-class/${cls.id}`)}
-        >
+    <>
+      <TeacherNavbar />
+      <div className="container mt-4">
+        <div className="card mb-4">
           <div className="card-body">
-            <h5 className="card-title">{cls.name}</h5>
-            <p className="card-text">Mã lớp: {cls.code}</p>
-            <button
-              className="btn btn-danger"
-              onClick={(e) => {
-                e.stopPropagation();
-                deleteClass(cls.id);
-              }}
-            >
-              Xóa lớp
+            <h2 className="card-title">Tạo lớp học</h2>
+            <input
+              type="text"
+              className="form-control mb-2"
+              value={className}
+              onChange={(e) => setClassName(e.target.value)}
+              placeholder="Nhập tên lớp"
+            />
+            <button className="btn btn-primary" onClick={createClass}>
+              Tạo lớp
             </button>
           </div>
         </div>
-      ))}
 
-      <h2 className="mb-3 mt-4">Lớp bạn tham gia</h2>
-      {joinedClasses.map((cls) => (
-        <div
-          key={cls.id}
-          className="card mb-2"
-          onClick={() => navigate(`/join-class/${cls.id}`)}
-        >
+        <div className="card mb-4">
           <div className="card-body">
-            <h5 className="card-title">{cls.name}</h5>
-            <p className="card-text">Mã lớp: {cls.code}</p>
-            <button
-              className="btn btn-warning"
-              onClick={(e) => {
-                e.stopPropagation();
-                leaveClass(cls.id);
-              }}
-            >
-              Rời lớp
+            <h2 className="card-title">Tham gia lớp học</h2>
+            <input
+              type="text"
+              className="form-control mb-2"
+              value={joinCode}
+              onChange={(e) => setJoinCode(e.target.value)}
+              placeholder="Nhập mã lớp"
+            />
+            <button className="btn btn-success" onClick={joinClass}>
+              Tham gia
             </button>
           </div>
         </div>
-      ))}
 
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Mã lớp học</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          Mã lớp của bạn: <strong>{newClassCode}</strong>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
-            Đóng
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+        <h2 className="mb-3">Lớp do bạn làm chủ nhiệm</h2>
+        {ownedClasses.map((cls) => (
+          <div
+            key={cls.id}
+            className="card mb-2"
+            onClick={() => navigate(`/your-class/${cls.id}`)}
+          >
+            <div className="card-body">
+              <h5 className="card-title">{cls.name}</h5>
+              <p className="card-text">Mã lớp: {cls.code}</p>
+              <button
+                className="btn btn-danger"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteClass(cls.id);
+                }}
+              >
+                Xóa lớp
+              </button>
+            </div>
+          </div>
+        ))}
+
+        <h2 className="mb-3 mt-4">Lớp bạn tham gia</h2>
+        {joinedClasses.map((cls) => (
+          <div
+            key={cls.id}
+            className="card mb-2"
+            onClick={() => navigate(`/join-class/${cls.id}`)}
+          >
+            <div className="card-body">
+              <h5 className="card-title">{cls.name}</h5>
+              <p className="card-text">Mã lớp: {cls.code}</p>
+              <button
+                className="btn btn-warning"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  leaveClass(cls.id);
+                }}
+              >
+                Rời lớp
+              </button>
+            </div>
+          </div>
+        ))}
+
+        <Modal show={showModal} onHide={() => setShowModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Mã lớp học</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Mã lớp của bạn: <strong>{newClassCode}</strong>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowModal(false)}>
+              Đóng
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    </>
   );
 };
 
