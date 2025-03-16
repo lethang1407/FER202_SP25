@@ -70,7 +70,6 @@ const QuizList = ({ classId }) => {
         `http://localhost:8888/classes/${classId}`
       );
 
-      // Không dùng parseInt, giữ nguyên kiểu dữ liệu String
       const updatedQuizzes = classResponse.data.quizzes_id.filter(
         (id) => id !== quizId
       );
