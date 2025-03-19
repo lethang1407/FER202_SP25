@@ -12,6 +12,9 @@ import OwnerClass from "./Pages/Teacher/OwnerClass";
 import LoginPage from "./Pages/LoginPage";
 import TeacherHome from "./Pages/Teacher/TeacherHome";
 import "bootstrap/dist/css/bootstrap.min.css";
+import HomePage from "./Pages/HomePage";
+import GuestQuiz from "./Pages/Guest/GuestQuiz";
+import Layout from "./Pages/Layout";
 
 const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -26,9 +29,14 @@ const ProtectedRoute = ({ element, roles }) => {
 const App = () => {
   return (
     <Router>
-      <div className="container mt-4">
+      <div className="container">
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/guest"
+            element={<ProtectedRoute element={<Layout><GuestQuiz /></Layout>} roles={[2]} />}
+          />
           <Route
             path="/questions"
             element={

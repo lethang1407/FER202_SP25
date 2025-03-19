@@ -1,0 +1,64 @@
+/* layout.css */
+
+/* Định dạng tổng thể */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Logo */
+  .logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #3a8dff;
+    text-decoration: none;
+  }
+  
+  /* Thanh tìm kiếm */
+  .search-box {
+    width: 40%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .search-box:focus {
+    border-color: #3a8dff;
+    box-shadow: 0 0 8px rgba(58, 141, 255, 0.3);
+  }
+  
+  /* Nút đăng nhập */
+  .login-btn {
+    padding: 10px 20px;
+    background-color: #3a8dff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    text-decoration: none;
+  }
+  
+  .login-btn:hover {
+    background-color: #2a6dcf;
+  }
+  
+  /* Nội dung chính */
+  .main-content {
+    padding: 20px;
+    text-align: center;
+  }
+  
