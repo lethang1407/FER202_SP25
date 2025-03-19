@@ -248,7 +248,8 @@
       "name": "Demo",
       "teacher_id": "3",
       "students": [
-        "4"
+        "4",
+        "6"
       ],
       "quizzes_id": [
         "8e52"
