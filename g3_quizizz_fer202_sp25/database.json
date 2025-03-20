@@ -7,7 +7,9 @@
       "dob": "1990-01-01",
       "role_id": 1,
       "gender": "male",
-      "img": "img/avt_df.png"
+      "img": "img/avt_df.png",
+      "roleName": "admin",
+      "role": "admin"
     },
     {
       "id": "2",
@@ -23,9 +25,11 @@
       "username": "teacher1",
       "password": "pass3",
       "dob": "1985-03-03",
-      "role_id": 2,
+      "role_id": "1",
       "gender": "male",
-      "img": "img/avt_df.png"
+      "img": "img/avt_df.png",
+      "roleName": "teacher",
+      "role": "teacher"
     },
     {
       "id": "4",
@@ -52,7 +56,9 @@
       "dob": "2000-06-06",
       "role_id": 3,
       "gender": "female",
-      "img": "img/avt_df.png"
+      "img": "img/avt_df.png",
+      "roleName": "student",
+      "role": "teacher"
     },
     {
       "id": "7",
@@ -89,6 +95,13 @@
       "role_id": 3,
       "gender": "male",
       "img": "img/avt_df.png"
+    },
+    {
+      "id": 11,
+      "username": "tagiang",
+      "password": "$2b$10$Zmty6x9AjMPKcG1FbWAkq.2cHx/7y6NsAkiSZMX05bDVZNlb64hOG",
+      "role_id": "1",
+      "roleName": "student"
     }
   ],
   "roles": [

@@ -15,6 +15,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./Pages/HomePage";
 import GuestQuiz from "./Pages/Guest/GuestQuiz";
 import Layout from "./Pages/Layout";
+import RegisterPage from "./Pages/Register";
+import AdminDashboard from "./Pages/Admin/DashBoard";
 
 const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -33,6 +35,11 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin/*" 
+          element={<ProtectedRoute element={<AdminDashboard />} roles={[1]} />} />
+          {/* <Route path="/admin/users" 
+          element={<ProtectedRoute element={<ManageUser />} roles={[1]} />} /> */}
           <Route
             path="/guest"
             element={<ProtectedRoute element={<Layout><GuestQuiz /></Layout>} roles={[2]} />}
