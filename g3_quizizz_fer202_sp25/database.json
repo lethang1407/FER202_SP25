@@ -25,7 +25,7 @@
       "username": "teacher1",
       "password": "pass3",
       "dob": "1985-03-03",
-      "role_id": "1",
+      "role_id": 2,
       "gender": "male",
       "img": "img/avt_df.png",
       "roleName": "teacher",
@@ -235,12 +235,14 @@
       "name": "Math 101",
       "teacher_id": "3",
       "students": [
-        "6",
-        "7"
+        "8",
+        "10",
+        "11"
       ],
       "quizzes_id": [
         "8e52",
         "2",
+        "c76d",
         "b1fb"
       ]
     },
@@ -320,8 +322,8 @@
   ],
   "quiz_results": [
     {
-      "id": "8e52",
-      "quiz_id": "2",
+      "id": "11",
+      "quiz_id": "8e52",
       "student_id": "6",
       "score": 80,
       "attempt": 1,
@@ -329,8 +331,8 @@
       "timestamp": "2025-03-16T10:15:00Z"
     },
     {
-      "id": "8e51",
-      "quiz_id": "c571",
+      "id": "2",
+      "quiz_id": "c76d",
       "student_id": "6",
       "score": 95,
       "attempt": 1,

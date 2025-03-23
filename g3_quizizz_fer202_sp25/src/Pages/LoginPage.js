@@ -43,6 +43,8 @@
       }
     };
 
+    console.log(localStorage.getItem("user"));
+
     return (
       <div className="login-container">
         <div className="login-box">

@@ -1,10 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const StudentList = ({ students, removeStudent }) => {
+const StudentList = ({ classId }) => {
+  const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [genderFilter, setGenderFilter] = useState("all");
+  const [allStudents, setAllStudents] = useState([]);
 
+  // Fetch toàn bộ danh sách học sinh khi component mount
+  useEffect(() => {
+    const fetchAllStudents = async () => {
+      try {
+        const response = await axios.get("http://localhost:8888/accounts");
+        setAllStudents(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách toàn bộ học sinh:", error);
+      }
+    };
+
+    fetchAllStudents();
+  }, []);
+
+  // Fetch danh sách học sinh trong lớp khi component mount hoặc khi classId thay đổi
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const classResponse = await axios.get(
+          `http://localhost:8888/classes/${classId}`
+        );
+        const studentIds = classResponse.data.students || [];
+
+        // Lọc danh sách học sinh trong lớp từ allStudents
+        const studentDetails = allStudents.filter((acc) =>
+          studentIds.includes(acc.id)
+        );
+
+        setStudents(studentDetails);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách học sinh:", error);
+      }
+    };
+
+    // Chỉ fetch khi allStudents đã có dữ liệu
+    if (allStudents.length > 0) {
+      fetchStudents();
+    }
+  }, [classId, allStudents]);
+
+  // Xóa học sinh khỏi lớp
+  const removeStudent = async (studentId) => {
+    try {
+      const classResponse = await axios.get(
+        `http://localhost:8888/classes/${classId}`
+      );
+      const classInfo = classResponse.data;
+
+      const updatedStudents = classInfo.students.filter(
+        (id) => id !== studentId.toString()
+      );
+
+      await axios.put(`http://localhost:8888/classes/${classId}`, {
+        ...classInfo,
+        students: updatedStudents,
+      });
+
+      // Cập nhật lại danh sách sinh viên ngay lập tức
+      setStudents((prevStudents) =>
+        prevStudents.filter((student) => student.id !== studentId)
+      );
+
+      alert("Đã xóa học sinh khỏi lớp!");
+    } catch (error) {
+      console.error("Lỗi khi xóa học sinh", error);
+      alert("Lỗi khi xóa học sinh. Vui lòng thử lại!");
+    }
+  };
+
+  // Lọc danh sách học sinh theo tìm kiếm và giới tính
   const filteredStudents = students.filter((student) => {
+    if (!student || !student.username) return false; // Tránh lỗi undefined
     const matchesSearch = student.username
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -43,7 +117,7 @@ const StudentList = ({ students, removeStudent }) => {
             {student.username} - {student.gender === "male" ? "Nam" : "Nữ"}
             <button
               className="btn btn-danger btn-sm"
-              onClick={() => removeStudent(parseInt(student.id))}
+              onClick={() => removeStudent(student.id)}
             >
               Xóa
             </button>

@@ -12,7 +12,6 @@ const OwnerClass = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("students");
   const [classInfo, setClassInfo] = useState(null);
-  const [students, setStudents] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
   const [quizResults, setQuizResults] = useState([]);
   const [newClassName, setNewClassName] = useState("");
@@ -26,16 +25,6 @@ const OwnerClass = () => {
       setClassInfo(classResponse.data);
       setNewClassName(classResponse.data.name);
       setNewClassCode(classResponse.data.code);
-
-      if (classResponse.data.students.length > 0) {
-        const studentsResponse = await axios.get(
-          "http://localhost:8888/accounts"
-        );
-        const studentDetails = studentsResponse.data.filter((acc) =>
-          classResponse.data.students.includes(acc.id)
-        );
-        setStudents(studentDetails);
-      }
 
       if (classResponse.data.quizzes_id.length > 0) {
         const quizzesResponse = await axios.get(
@@ -73,24 +62,7 @@ const OwnerClass = () => {
       alert("Cập nhật thông tin lớp học thành công!");
       fetchClassDetails();
     } catch (error) {
-      console.error("Error updating class info", error);
-    }
-  };
-
-  const removeStudent = async (studentId) => {
-    try {
-      const updatedStudents = classInfo.students.filter(
-        (sId) => sId !== studentId
-      );
-      await axios.put(`http://localhost:8888/classes/${id}`, {
-        ...classInfo,
-        students: updatedStudents,
-      });
-
-      alert("Đã xóa học sinh khỏi lớp!");
-      fetchClassDetails();
-    } catch (error) {
-      console.error("Error removing student", error);
+      console.error("Lỗi khi cập nhật thông tin lớp", error);
     }
   };
 
@@ -148,9 +120,7 @@ const OwnerClass = () => {
 
       {/* Nội dung */}
       <div className="mt-4">
-        {activeTab === "students" && (
-          <StudentList students={students} removeStudent={removeStudent} />
-        )}
+        {activeTab === "students" && <StudentList classId={id} />}
         {activeTab === "classInfo" && (
           <ClassInfo
             newClassName={newClassName}
@@ -162,11 +132,7 @@ const OwnerClass = () => {
         )}
         {activeTab === "quizzes" && <QuizList classId={id} />}
         {activeTab === "quizResults" && (
-          <QuizResultsTable
-            quizResults={quizResults}
-            students={students}
-            quizzes={quizzes}
-          />
+          <QuizResultsTable quizResults={quizResults} quizzes={quizzes} />
         )}
       </div>
     </div>
