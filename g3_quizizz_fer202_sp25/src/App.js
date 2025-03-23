@@ -37,13 +37,21 @@ const App = () => {
           {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/admin/*" 
-          element={<ProtectedRoute element={<AdminDashboard />} roles={[1]} />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute element={<AdminDashboard />} roles={[1]} />
+            }
+          />
           {/* <Route path="/admin/users" 
           element={<ProtectedRoute element={<ManageUser />} roles={[1]} />} /> */}
           <Route
             path="/"
-            element={<ProtectedRoute element={<Layout><GuestQuiz /></Layout>} roles={[2]} />}
+            element={
+              <Layout>
+                <GuestQuiz />
+              </Layout>
+            }
           />
           <Route
             path="/questions"
@@ -53,7 +61,16 @@ const App = () => {
           />
           <Route
             path="/student-home"
-            element={<ProtectedRoute element={<Layout><StudentHome /></Layout>} roles={[3]} />}
+            element={
+              <ProtectedRoute
+                element={
+                  <Layout>
+                    <StudentHome />
+                  </Layout>
+                }
+                roles={[3]}
+              />
+            }
           />
           <Route
             path="/teacher-home"
