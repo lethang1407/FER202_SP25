@@ -55,10 +55,18 @@ const TeacherNavbar = () => {
             </Nav.Link>
           </Nav>
           <Nav>
+          <Nav.Link href="/profile" className="text-info">
+              <i className="bi bi-person-circle"></i> View Profile
+            </Nav.Link>
+            
+          </Nav>
+          <Nav>
+            
             <Nav.Link onClick={handleLogout} className="text-danger">
               Đăng xuất
             </Nav.Link>
           </Nav>
+          
         </Navbar.Collapse>
       </Container>
     </Navbar>

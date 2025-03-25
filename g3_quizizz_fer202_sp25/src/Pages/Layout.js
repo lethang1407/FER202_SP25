@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../css/layout.css"; // Import file CSS
-
 const Layout = ({ children }) => {
   return (
     <div>
@@ -18,7 +17,8 @@ const Layout = ({ children }) => {
           placeholder="Tìm kiếm câu hỏi"
           className="search-box"
         />
-
+      
+        
         {/* Đăng nhập */}
         <Link to="/login" className="login-btn">
           Đăng nhập
