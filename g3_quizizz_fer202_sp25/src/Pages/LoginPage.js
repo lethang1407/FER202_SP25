@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const LoginPage = () => {
@@ -44,6 +44,12 @@ const LoginPage = () => {
 
   return (
     <div className="container mt-5">
+      <header className="header">
+        {/* Logo */}
+        <Link to="/" className="logo">
+          QuizApp
+        </Link>
+      </header>
       <div className="row justify-content-center">
         <div className="col-md-4">
           <h2 className="text-center">Login</h2>

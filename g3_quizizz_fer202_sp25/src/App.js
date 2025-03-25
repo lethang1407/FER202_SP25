@@ -15,6 +15,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import HomePage from "./Pages/HomePage";
 import GuestQuiz from "./Pages/Guest/GuestQuiz";
 import Layout from "./Pages/Layout";
+import Student_Home from "./Pages/Student/StudentHome";
 
 const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -35,7 +36,11 @@ const App = () => {
           <Route path="/login" element={<LoginPage />} />
           <Route
             path="/guest"
-            element={<ProtectedRoute element={<Layout><GuestQuiz /></Layout>} roles={[2]} />}
+            element={
+              <Layout>
+                <GuestQuiz />
+              </Layout>
+            }
           />
           <Route
             path="/questions"
@@ -50,6 +55,10 @@ const App = () => {
           <Route
             path="/create-quiz"
             element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />}
+          />
+          <Route
+            path="/student-home"
+            element={<ProtectedRoute element={<Student_Home />} roles={[3]} />}
           />
           <Route
             path="/manage-classes"
