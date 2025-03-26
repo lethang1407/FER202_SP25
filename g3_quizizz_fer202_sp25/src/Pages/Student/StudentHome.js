@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { Alert, Button, Card, Container } from "react-bootstrap"
 import JoinClass from "./component/JoinClass"
-
+import {  Nav } from "react-bootstrap";
 const StudentHome = () => {
   const [questions, setQuestions] = useState([])
   const [selectedAnswers, setSelectedAnswers] = useState({})
@@ -82,7 +82,11 @@ const StudentHome = () => {
   return (
     <Container className="mt-4">
       <h2 className="text-center mb-4">📚 Student Dashboard</h2>
-
+      <Nav>
+        <Nav.Link href="/profile" className="text-info">
+              <i className="bi bi-person-circle"></i> View Profile
+            </Nav.Link>
+       </Nav>
       <Card className="mb-4 p-3 shadow-sm">
         <Card.Body>
           <h4 className="mb-3">Tham gia lớp học</h4>

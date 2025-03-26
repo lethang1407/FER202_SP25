@@ -18,6 +18,9 @@ import Layout from "./Pages/Layout";
 import StudentHome from "./Pages/Student/StudentHome";
 import RegisterPage from "./Pages/Register";
 import AdminDashboard from "./Pages/Admin/DashBoard";
+import ProfilePage from "./Pages/ProfilePage";
+import UpdateProfile from "./Pages/UpdateProfile"; // trimpot
+import ChangePassword from "./Pages/ChangePassword";
 
 const getUserRole = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -93,6 +96,9 @@ const App = () => {
             path="/your-class/:id"
             element={<ProtectedRoute element={<OwnerClass />} roles={[2, 3]} />}
           />
+             <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} roles={[1, 2, 3]} />} />
+          <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/change-password" element={<ChangePassword />} />
         </Routes>
       </div>
     </Router>

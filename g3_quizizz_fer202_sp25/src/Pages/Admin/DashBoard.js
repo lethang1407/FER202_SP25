@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../css/admin-dashboard.css";
 import ManageUsers from "./ManageUsers";
+import {  Nav } from "react-bootstrap";
 // import ManageClasses from "./ManageClasses";
 // import ManageQuizzes from "./ManageQuizzes";
 // import ManageQuestions from "./ManageQuestions";
 // import ManageResults from "./ManageResults";
-
+import { useNavigate } from "react-router-dom";
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
   // const [questions, setQuestions] = useState([]);
@@ -23,15 +24,21 @@ const AdminDashboard = () => {
     // fetch("http://localhost:8888/quizzes").then(res => res.json()).then(setQuizzes);
     // fetch("http://localhost:8888/quiz_results").then(res => res.json()).then(setQuizResults);
   }, []);
-
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <div className="admin-dashboard d-flex">
       <nav className="sidebar bg-dark text-white p-3">
         <h4 className="text-center"><Link to="/admin" className="nav-link text-white">Admin Panel</Link></h4>
+
         <ul className="nav flex-column">
           <li className="nav-item">
             <button className="nav-link text-white" onClick={() => setActiveSection("users")}>Quản lý người dùng</button>
           </li>
+          
           {/* <li className="nav-item">
             <button className="nav-link text-white" onClick={() => setActiveSection("classes")}>Quản lý lớp học</button>
           </li>
@@ -45,6 +52,15 @@ const AdminDashboard = () => {
             <button className="nav-link text-white" onClick={() => setActiveSection("results")}>Kết quả bài kiểm tra</button>
           </li> */}
         </ul>
+        <Nav.Link href="/profile" className="text-info">
+              <i className="bi bi-person-circle"></i> View Profile
+            </Nav.Link>
+            <Nav>
+                        
+                        <Nav.Link onClick={handleLogout} className="text-danger">
+                          Logout
+                        </Nav.Link>
+                      </Nav>
       </nav>
 
       <div className="content p-4 w-100">
