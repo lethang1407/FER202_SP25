@@ -177,30 +177,7 @@ const TeacherClassManagement = () => {
             </div>
           </div>
         ))}
-
-        <h2 className="mb-3 mt-4">Lớp bạn tham gia</h2>
-        {joinedClasses.map((cls) => (
-          <div
-            key={cls.id}
-            className="card mb-2"
-            onClick={() => navigate(`/join-class/${cls.id}`)}
-          >
-            <div className="card-body">
-              <h5 className="card-title">{cls.name}</h5>
-              <p className="card-text">Mã lớp: {cls.code}</p>
-              <button
-                className="btn btn-warning"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  leaveClass(cls.id);
-                }}
-              >
-                Rời lớp
-              </button>
-            </div>
-          </div>
-        ))}
-
+        
         <Modal show={showModal} onHide={() => setShowModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Mã lớp học</Modal.Title>
