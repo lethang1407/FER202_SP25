@@ -24,7 +24,7 @@
       "id": "3",
       "username": "teacher1",
       "password": "123",
-      "dob": "1985-03-03",
+      "dob": "2002-03-03",
       "role_id": 2,
       "gender": "male",
       "img": "img/avt_df.png",
@@ -156,18 +156,6 @@
       "author_id": "4"
     },
     {
-      "id": "c571",
-      "question": "Test",
-      "options": [
-        "Demo",
-        "Abc",
-        "Def",
-        "Ghi"
-      ],
-      "answer": "Demo",
-      "author_id": "3"
-    },
-    {
       "id": "cc5a",
       "question": "ReactJS được phát triển bởi ai?",
       "options": [
@@ -226,6 +214,18 @@
       ],
       "answer": "useEffect",
       "author_id": "3"
+    },
+    {
+      "id": "5ce4",
+      "question": "1+1=?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "answer": "3",
+      "author_id": "3"
     }
   ],
   "classes": [
@@ -263,25 +263,16 @@
       "name": "Demo",
       "teacher_id": "3",
       "students": [
-        "4",
         "6"
       ],
       "quizzes_id": [
-        "8e52"
+        "8e52",
+        "75d1",
+        "c76d"
       ]
     }
   ],
   "quizzes": [
-    {
-      "title": "Test",
-      "teacher_id": "3",
-      "questions": [
-        "c571"
-      ],
-      "is_guest": true,
-      "id": "8e52",
-      "duration": 100
-    },
     {
       "title": "FER202",
       "teacher_id": "3",
@@ -312,9 +303,9 @@
       "teacher_id": "3",
       "questions": [
         "1",
-        "c571",
         "3dea",
-        "a415"
+        "a415",
+        "5ce4"
       ],
       "is_guest": false,
       "duration": null
