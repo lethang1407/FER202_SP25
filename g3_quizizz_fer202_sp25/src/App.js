@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import QuizCreator from "./Pages/Teacher/QuizCreator";
 import QuestionManager from "./Pages/Teacher/QuestionManager";
 import TeacherClassManagement from "./Pages/Teacher/TeacherClassManagement";
@@ -12,14 +7,13 @@ import OwnerClass from "./Pages/Teacher/OwnerClass";
 import LoginPage from "./Pages/LoginPage";
 import TeacherHome from "./Pages/Teacher/TeacherHome";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import HomePage from "./Pages/HomePage";
 import GuestQuiz from "./Pages/Guest/GuestQuiz";
 import Layout from "./Pages/Layout";
 import StudentHome from "./Pages/Student/StudentHome";
 import RegisterPage from "./Pages/Register";
-import AdminDashboard from "./Pages/Admin/DashBoard";
+import AdminDashboard from "./Pages/Admin/component/DashBoard";
 import ProfilePage from "./Pages/ProfilePage";
-import UpdateProfile from "./Pages/UpdateProfile"; // trimpot
+import UpdateProfile from "./Pages/UpdateProfile";
 import ChangePassword from "./Pages/ChangePassword";
 
 const getUserRole = () => {
@@ -37,17 +31,9 @@ const App = () => {
     <Router>
       <div className="container">
         <Routes>
-          {/* <Route path="/" element={<HomePage />} /> */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route
-            path="/admin/*"
-            element={
-              <ProtectedRoute element={<AdminDashboard />} roles={[1]} />
-            }
-          />
-          {/* <Route path="/admin/users" 
-          element={<ProtectedRoute element={<ManageUser />} roles={[1]} />} /> */}
+          <Route path="/admin/*" element={<ProtectedRoute element={<AdminDashboard />} roles={[1]} />} />
           <Route
             path="/"
             element={
@@ -56,12 +42,7 @@ const App = () => {
               </Layout>
             }
           />
-          <Route
-            path="/questions"
-            element={
-              <ProtectedRoute element={<QuestionManager />} roles={[2]} />
-            }
-          />
+          <Route path="/questions" element={<ProtectedRoute element={<QuestionManager />} roles={[2]} />} />
           <Route
             path="/student-home"
             element={
@@ -75,30 +56,13 @@ const App = () => {
               />
             }
           />
-          <Route
-            path="/teacher-home"
-            element={<ProtectedRoute element={<TeacherHome />} roles={[2]} />}
-          />
-          <Route
-            path="/create-quiz"
-            element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />}
-          />
-          <Route
-            path="/manage-classes"
-            element={
-              <ProtectedRoute
-                element={<TeacherClassManagement />}
-                roles={[2]}
-              />
-            }
-          />
-          <Route
-            path="/your-class/:id"
-            element={<ProtectedRoute element={<OwnerClass />} roles={[2, 3]} />}
-          />
-             <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} roles={[1, 2, 3]} />} />
+          <Route path="/teacher-home" element={<ProtectedRoute element={<TeacherHome />} roles={[2]} />} />
+          <Route path="/create-quiz" element={<ProtectedRoute element={<QuizCreator />} roles={[2]} />} />
+          <Route path="/manage-classes" element={<ProtectedRoute element={<TeacherClassManagement />} roles={[2]} />} />
+          <Route path="/your-class/:id" element={<ProtectedRoute element={<OwnerClass />} roles={[2, 3]} />} />
+          <Route path="/profile" element={<ProtectedRoute element={<ProfilePage />} roles={[1, 2, 3]} />} />
           <Route path="/update-profile" element={<UpdateProfile />} />
-        <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Routes>
       </div>
     </Router>
