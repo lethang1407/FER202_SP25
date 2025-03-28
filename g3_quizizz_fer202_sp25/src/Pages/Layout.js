@@ -10,14 +10,6 @@ const Layout = ({ children }) => {
         <Link to="/" className="logo">
           QuizApp
         </Link>
-
-        {/* Thanh tìm kiếm */}
-        <input
-          type="text"
-          placeholder="Tìm kiếm câu hỏi"
-          className="search-box"
-        />
-      
         
         {/* Đăng nhập */}
         <Link to="/login" className="login-btn">

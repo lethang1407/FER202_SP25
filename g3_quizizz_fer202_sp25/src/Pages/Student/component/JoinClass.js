@@ -3,7 +3,8 @@ import { Form, Button, Alert, Container } from "react-bootstrap";
 import axios from "axios";
 
 const JoinClass = () => {
-  const [classCode, setClassCode] = useState("");
+  const [classList, setClassList] = useState([]); // Danh sách lớp
+  const [selectedClass, setSelectedClass] = useState(""); // Lớp được chọn
   const [message, setMessage] = useState(null);
   const [variant, setVariant] = useState("success");
   const [userId, setUserId] = useState(null);
@@ -14,67 +15,79 @@ const JoinClass = () => {
     if (storedUser) {
       setUserId(storedUser.id);
     }
+
+    // Lấy danh sách lớp từ API
+    axios
+      .get("http://localhost:8888/classes")
+      .then((response) => {
+        setClassList(response.data);
+      })
+      .catch((error) => {
+        console.error("Lỗi khi lấy danh sách lớp:", error);
+        setMessage("Không thể tải danh sách lớp.");
+        setVariant("danger");
+      });
   }, []);
 
   const handleJoinClass = () => {
-    if (!classCode.trim()) {
-      setMessage("Vui lòng nhập mã lớp!");
+    if (!selectedClass) {
+      setMessage("Vui lòng chọn lớp!");
       setVariant("danger");
       return;
     }
 
-    axios.get("http://localhost:8888/classes")
-      .then((response) => {
-        const classes = response.data;
-        const foundClass = classes.find(cls => cls.code === classCode);
+    const foundClass = classList.find((cls) => cls.id === selectedClass);
 
-        if (foundClass) {
-          if (foundClass.students.includes(userId)) {
-            setMessage(`Bạn đã tham gia lớp ${foundClass.name} rồi!`);
-            setVariant("warning");
-          } else {
-            axios.patch(`http://localhost:8888/classes/${foundClass.id}`, {
-              students: [...foundClass.students, userId]
-            })
-            .then(() => {
-              setMessage(`Join class ${foundClass.name} thành công!`);
-              setVariant("success");
-              setClassCode("");
-            })
-            .catch(error => {
-              console.error("Error joining class:", error);
-              setMessage("Có lỗi xảy ra, vui lòng thử lại!");
-              setVariant("danger");
-            });
-          }
-        } else {
-          setMessage("Mã lớp không hợp lệ!");
-          setVariant("danger");
-        }
-      })
-      .catch(error => {
-        console.error("Error fetching classes:", error);
-        setMessage("Có lỗi xảy ra, vui lòng thử lại!");
-        setVariant("danger");
-      });
+    if (foundClass) {
+      if (foundClass.students.includes(userId)) {
+        setMessage(`Bạn đã tham gia lớp ${foundClass.name} rồi!`);
+        setVariant("warning");
+      } else {
+        axios
+          .patch(`http://localhost:8888/classes/${foundClass.id}`, {
+            students: [...foundClass.students, userId],
+          })
+          .then(() => {
+            setMessage(`Tham gia lớp ${foundClass.name} thành công!`);
+            setVariant("success");
+            setSelectedClass("");
+          })
+          .catch((error) => {
+            console.error("Lỗi khi tham gia lớp:", error);
+            setMessage("Có lỗi xảy ra, vui lòng thử lại!");
+            setVariant("danger");
+          });
+      }
+    } else {
+      setMessage("Lớp học không hợp lệ!");
+      setVariant("danger");
+    }
   };
 
   return (
     <Container className="mt-4">
-     
-
       {message && <Alert variant={variant}>{message}</Alert>}
 
       <Form.Group className="mb-3">
-        <Form.Control
-          type="text"
-          value={classCode}
-          onChange={(e) => setClassCode(e.target.value)}
-          placeholder="Nhập mã lớp học"
-        />
+        <Form.Label>Chọn lớp học</Form.Label>
+        <Form.Select
+          value={selectedClass}
+          onChange={(e) => setSelectedClass(e.target.value)}
+        >
+          <option value="">-- Chọn lớp --</option>
+          {classList.map((cls) => (
+            <option key={cls.id} value={cls.id}>
+              {cls.name} ({cls.code})
+            </option>
+          ))}
+        </Form.Select>
       </Form.Group>
 
-      <Button variant="primary" onClick={handleJoinClass} disabled={!userId}>
+      <Button
+        variant="primary"
+        onClick={handleJoinClass}
+        disabled={!userId || !selectedClass}
+      >
         Tham gia lớp
       </Button>
     </Container>

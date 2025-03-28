@@ -16,30 +16,49 @@
         const response = await fetch("http://localhost:8888/accounts");
         const users = await response.json();
         const user = users.find((u) => u.username === username);
-        const validPassword = bcrypt.compareSync(password, user.password);
-
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
-
-          switch (user.role_id) {
-            case 1:
-              navigate("/admin");
-              break;
-            case 2:
-              navigate("/teacher-home");
-              break;
-            case 3:
-              navigate("/student-home");
-              break;
-            default:
-              setError("Unauthorized role");
+    
+        if (!user) {
+          const confirmRegister = window.confirm("Tài khoản không tồn tại. Bạn có muốn đăng ký không?");
+          if (confirmRegister) {
+            navigate("/register");
+          } else {
+            navigate("/");
           }
-        } else if (!validPassword || !user) {
-          setError("Invalid username or password");
+          return;
+        }
+    
+        let validPassword = false;
+    
+        // Kiểm tra nếu mật khẩu đã mã hóa hay chưa
+        if (user.password.startsWith("$2b$")) { 
+          validPassword = bcrypt.compareSync(password, user.password);
+        } else {
+          validPassword = password === user.password; // So sánh trực tiếp nếu chưa mã hóa
+        }
+    
+        if (!validPassword) {
+          setError("Mật khẩu không chính xác");
+          return;
+        }
+    
+        localStorage.setItem("user", JSON.stringify(user));
+    
+        switch (Number(user.role_id)) { // Đảm bảo role_id là số
+          case 1:
+            navigate("/admin");
+            break;
+          case 2:
+            navigate("/teacher-home");
+            break;
+          case 3:
+            navigate("/student-home");
+            break;
+          default:
+            setError("Unauthorized role");
         }
       } catch (err) {
-        console.error("Lỗi",err);
-        setError("Error connecting to server");
+        console.error("Lỗi", err);
+        setError("Lỗi kết nối đến máy chủ");
       }
     };
 

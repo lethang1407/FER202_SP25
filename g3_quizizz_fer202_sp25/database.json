@@ -102,6 +102,18 @@
       "password": "$2b$10$Zmty6x9AjMPKcG1FbWAkq.2cHx/7y6NsAkiSZMX05bDVZNlb64hOG",
       "role_id": "1",
       "roleName": "student"
+    },
+    {
+      "id": 12,
+      "username": "student1 ",
+      "password": "$2b$10$gcgFrqsoFUdylKqdiTkMVuTWqMnUuH3kcSiS1Gg69rfYmAS/bJWPq",
+      "role_id": 3
+    },
+    {
+      "id": 13,
+      "username": "teacher26",
+      "password": "$2b$10$VDX2VA1deSedbAgXoy3k.OrDQu5JgB5WYNnOCVNmt.vpULezvv5XW",
+      "role_id": 2
     }
   ],
   "roles": [
@@ -226,6 +238,18 @@
       ],
       "answer": "3",
       "author_id": "3"
+    },
+    {
+      "id": "00e7",
+      "question": "1+1=",
+      "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "answer": "2",
+      "author_id": 13
     }
   ],
   "classes": [
@@ -237,7 +261,8 @@
       "students": [
         "8",
         "10",
-        "11"
+        "11",
+        12
       ],
       "quizzes_id": [
         "8e52",
@@ -263,7 +288,8 @@
       "name": "Demo",
       "teacher_id": "3",
       "students": [
-        "6"
+        "6",
+        12
       ],
       "quizzes_id": [
         "8e52",

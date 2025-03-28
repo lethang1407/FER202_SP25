@@ -12,7 +12,7 @@ import OwnerClass from "./Pages/Teacher/OwnerClass";
 import LoginPage from "./Pages/LoginPage";
 import TeacherHome from "./Pages/Teacher/TeacherHome";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import HomePage from "./Pages/HomePage";
+import HomePage from "./Pages/HomePage";
 import GuestQuiz from "./Pages/Guest/GuestQuiz";
 import Layout from "./Pages/Layout";
 import StudentHome from "./Pages/Student/StudentHome";
@@ -37,7 +37,7 @@ const App = () => {
     <Router>
       <div className="container">
         <Routes>
-          {/* <Route path="/" element={<HomePage />} /> */}
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route
@@ -49,7 +49,7 @@ const App = () => {
           {/* <Route path="/admin/users" 
           element={<ProtectedRoute element={<ManageUser />} roles={[1]} />} /> */}
           <Route
-            path="/"
+            path="/guest"
             element={
               <Layout>
                 <GuestQuiz />
